@@ -21,27 +21,15 @@ def teardown_db(exception):
     """
     storage.close()
 
-
-@app.route('/0-hbnb/', strict_slashes=False)
-def hbnb():
-    """
-    Fetches necessary data and renders the template.
-    """
-    cache_id = str(uuid.uuid4())
-
-    states = storage.all(State).values()
-    sorted_states = sorted(states, key=lambda state: state.name)
-    st_ct = []
-
     for state in sorted_states:
-        sorted_cities = sorted(state.cities, key=lambda city: city.name)
+        sorted_cities = sorted(state.cities, key=lambda k: k.name)
         st_ct.append([state, sorted_cities])
 
     amenities = storage.all(Amenity).values()
-    sorted_amenities = sorted(amenities, key=lambda amenity: amenity.name)
+    sorted_amenities = sorted(amenities, key=lambda k: k.name)
 
     places = storage.all(Place).values()
-    sorted_places = sorted(places, key=lambda place: place.name)
+    sorted_places = sorted(places, key=lambda k: k.name)
 
     return render_template('0-hbnb.html',
                            states=st_ct,
@@ -51,4 +39,4 @@ def hbnb():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=5000)

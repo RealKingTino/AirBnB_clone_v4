@@ -14,12 +14,16 @@ from models.place import Place
 app = Flask(__name__)
 
 
-@app.teardown_appcontext
-def teardown_db(exception):
+@app.route('/4-hbnb/', strict_slashes=False)
+def hbnb():
     """
-    Closes the storage on teardown.
+    Fetches necessary data and renders the template.
     """
-    storage.close()
+    cache_id = str(uuid.uuid4())
+
+    states = storage.all(State).values()
+    sorted_states = sorted(states, key=lambda k: k.name)
+    st_ct = []
 
     for state in sorted_states:
         sorted_cities = sorted(state.cities, key=lambda k: k.name)
@@ -31,7 +35,7 @@ def teardown_db(exception):
     places = storage.all(Place).values()
     sorted_places = sorted(places, key=lambda k: k.name)
 
-    return render_template('1-hbnb.html',
+    return render_template('4-hbnb.html',
                            states=st_ct,
                            amenities=sorted_amenities,
                            places=sorted_places,
